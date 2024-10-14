@@ -1,0 +1,159 @@
+import java.util.Scanner;
+
+// Person class (Base Class)
+class Person {
+    String name;
+    int age;
+
+    // Constructor to initialize name and age
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    // Method to display person information
+    void displayInfo() {
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+    }
+}
+
+// Student class (Subclass of Person)
+class Student extends Person {
+    String studentID;
+    String course;
+    int units;
+    final int feePerUnit = 1000;
+
+    // Constructor to initialize student details
+    Student(String name, int age, String studentID, String course, int units) {
+        super(name, age); // Call the Person class constructor
+        this.studentID = studentID;
+        this.course = course;
+        this.units = units;
+    }
+
+    // Method to calculate total fees
+    double calculateFees() {
+        return units * feePerUnit;
+    }
+
+    // Override displayInfo method for Student
+    @Override
+    void displayInfo() {
+        super.displayInfo(); // Call the Person class displayInfo method
+        System.out.println("Student ID: " + studentID);
+        System.out.println("Course: " + course);
+        System.out.println("Units: " + units);
+        System.out.println("Total Fees: " + calculateFees());
+    }
+}
+
+// Instructor class (Subclass of Person)
+class Instructor extends Person {
+    String employeeID;
+    String department;
+    double salary;
+
+    // Constructor to initialize instructor details
+    Instructor(String name, int age, String employeeID, String department, double salary) {
+        super(name, age); // Call the Person class constructor
+        this.employeeID = employeeID;
+        this.department = department;
+        this.salary = salary;
+    }
+
+    // Override displayInfo method for Instructor
+    @Override
+    void displayInfo() {
+        super.displayInfo(); // Call the Person class displayInfo method
+        System.out.println("Employee ID: " + employeeID);
+        System.out.println("Department: " + department);
+        System.out.println("Salary: " + salary);
+    }
+}
+
+// Test program
+public class EnrolmentSystem {
+    // Method to print details of a Person object
+    static void printDetails(Person p) {
+        p.displayInfo(); // Call the appropriate displayInfo method based on the type of object
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Get user input for the type of person
+        System.out.println("Enter the type of person (student/instructor): ");
+        String personType = scanner.nextLine();
+
+        // Create a Person object based on the user input
+        Person person;
+        if (personType.equalsIgnoreCase("student")) {
+            System.out.println("Enter student name: ");
+            String name = scanner.nextLine();
+            System.out.println("Enter student age: ");
+            int age = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+            System.out.println("Enter student ID: ");
+            String studentID = scanner.nextLine();
+            System.out.println("Enter student course: ");
+            String course = scanner.nextLine();
+            System.out.println("Enter student units: ");
+            int units = scanner.nextInt();
+            person = new Student(name, age, studentID, course, units);
+        } else if (personType.equalsIgnoreCase("instructor")) {
+            System.out.println("Enter instructor name: ");
+            String name = scanner.nextLine();
+            System.out.println("Enter instructor age: ");
+            int age = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character
+            System.out.println("Enter instructor ID: ");
+            String employeeID = scanner.nextLine();
+            System.out.println("Enter instructor department: ");
+            String department = scanner.nextLine();
+            System.out.println("Enter instructor salary: ");
+            double salary = scanner.nextDouble();
+            person = new Instructor(name, age, employeeID, department, salary);
+        } else {
+            System.out.println("Invalid person type.");
+            return; // Exit the program
+        }
+
+        // Print the details of the person
+        System.out.println("\nPerson Details:");
+        printDetails(person);
+
+        // Ask the customer if they want to perform additional actions
+        System.out.println("\nDo you want to perform any additional actions? (yes/no)");
+        String response = scanner.nextLine();
+
+        if (response.equalsIgnoreCase("yes")) {
+            // Additional actions
+            if (person instanceof Student) {
+                // Ask for specific actions for student
+                System.out.println("\nWhat do you want to do with the student? (calculate fees/display info):");
+                String studentAction = scanner.nextLine();
+
+                if (studentAction.equalsIgnoreCase("calculate fees")) {
+                    Student student = (Student) person;
+                    System.out.println("Total fees: " + student.calculateFees());
+                } else if (studentAction.equalsIgnoreCase("display info")) {
+                    printDetails(person);
+                } else {
+                    System.out.println("Invalid action.");
+                }
+            } else if (person instanceof Instructor) {
+                // Ask for specific actions for instructor
+                System.out.println("\nWhat do you want to do with the instructor? (display info):");
+                String instructorAction = scanner.nextLine();
+
+                if (instructorAction.equalsIgnoreCase("display info")) {
+                    printDetails(person);
+                } else {
+                    System.out.println("Invalid action.");
+                }
+            }
+        }
+    }
+}
